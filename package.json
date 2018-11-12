@@ -1,0 +1,22 @@
+{
+  "name": "l5_nodejs",
+  "version": "1.0.0",
+  "description": "lab 5",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rafalp190/L5_Nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rafalp190/L5_Nodejs/issues"
+  },
+  "homepage": "https://github.com/Rafalp190/L5_Nodejs#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
