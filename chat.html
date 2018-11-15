@@ -86,7 +86,6 @@ body {
 			socket.emit('chat message', $('#m').val())
 			$('#m').val('');
 			const tempScrollTop = document.getElementById("chat-messages").scrollTop;
-			console.log(tempScrollTop)
 			document.getElementById("chat-messages").scrollTop = tempScrollTop
 			return false;
 		})
