@@ -71,60 +71,45 @@ body {
 			</div>
 			<div id="text-in" class="text-in">
 				<div id="message-box">
-					<form method="post" onsubmit="send_message(event, this)">
-	    				<input name="text" type="text" class="text-element">
+					<form action="">
+	    				<input name="text" id="m" type="text" class="text-element">
 	   					<input name="formSubmit" type="submit" value="Send" />
 					</form>
 				</div>
 			</div> 
 		</div>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 		<script>
-			const my_id = "13361";
-			const my_nick = "rafalp";
-			function start() {
-		  		get_messages("http://34.210.35.174:7000")
-		  		setTimeout(start, 10000);
-			}
+		var socket = io();
+		$('form').submit(function(){
+			socket.emit('chat message', $('#m').val())
+			$('#m').val('');
+			const tempScrollTop = document.getElementById("chat-messages").scrollTop;
+			console.log(tempScrollTop)
+			document.getElementById("chat-messages").scrollTop = tempScrollTop
+			return false;
+		})
 
-			function get_messages(url) {
-				const tempScrollTop = document.getElementById("chat-messages").scrollTop;
-				console.log(tempScrollTop)
+		socket.on('chat message', function(newMessages) {
+				const my_id = "13361";
 				document.getElementById("chat-messages").innerHTML = ""
-				fetch(url).then(x => 
-					x.json()).then(x => {
-						x.map(y =>  {
-							const student_id = y.student_id;
-							const nick = y.nick;
-							const message = y.text
-							 
-							const p = document.createElement("p")
-							p.className ="other-message"
-							if (student_id === my_id){
-								p.className = "my-message"
-							}
-							p.innerHTML = ""+nick+"#"+student_id+":<br />"+message
 
-							document.getElementById("chat-messages").append(p)
-							
-						})
-					}).then(x => document.getElementById("chat-messages").scrollTop = tempScrollTop)
-				
-			}
-
-			function send_message(event, form) {
-				event.preventDefault()
-				
-				let formData = new FormData(form)
-				
-				formData.append("student_id", my_id)
-				formData.append("nick", my_nick)
-				
-				fetch("http://34.210.35.174:7000", {method: "post",  body: formData})
-
-			}
-			//get_messages("http://34.210.35.174:7000")
-			//setTimeout(function(){ get_messages("http://34.210.35.174:7000") }, 5000)
-			start();
+				newMessages.map(y =>  {
+						const student_id = y.student_id;
+						const nick = y.nick;
+						const message = y.text
+						
+						const p = document.createElement("p")
+						p.className ="other-message"
+						if (student_id === my_id){
+							p.className = "my-message"
+						}
+						p.innerHTML = ""+nick+"#"+student_id+":<br />"+message
+						document.getElementById("chat-messages").append(p)
+						
+					})
+		})
 		</script>
 	</body>
 </html>
