@@ -17,7 +17,11 @@ body {
 	box-sizing: border-box;
 	
 }
-
+.message {
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 
 .chat-messages {
 	overflow-y: scroll;
@@ -40,7 +44,7 @@ body {
 	margin-left: 10px;
 	width: 500px;
 	border-radius: 5px 0px 5px 5px;
-	height: auto;
+	height: 140px;
 }
 
 .my-message{
@@ -48,7 +52,7 @@ body {
 	margin-right: 10px;
 	margin-top: 10px;
 	width: 500px;
-	height: auto;
+	height: 140px;
 	text-align: right;
 	background: #e1ffc7;
   	border-radius: 5px 0px 5px 5px;
@@ -92,21 +96,19 @@ body {
 
 		socket.on('chat message', function(newMessages) {
 				const my_id = "13361";
-				document.getElementById("chat-messages").innerHTML = ""
-
+				const tempScrollTop = document.getElementById("chat-messages").scrollTop;
 				newMessages.map(y =>  {
 						const student_id = y.student_id;
 						const nick = y.nick;
 						const message = y.text
-						
 						const p = document.createElement("p")
 						p.className ="other-message"
 						if (student_id === my_id){
 							p.className = "my-message"
 						}
-						p.innerHTML = ""+nick+"#"+student_id+":<br />"+message
+						p.innerHTML = ""+nick+"#"+student_id+":<br />"+"<div class='message'>"+message+"</div>"
 						document.getElementById("chat-messages").append(p)
-						
+						document.getElementById("chat-messages").scrollTop = tempScrollTop
 					})
 		})
 		</script>

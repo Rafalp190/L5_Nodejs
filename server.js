@@ -8,15 +8,15 @@ const axios = require('axios')
 
 const my_id = "13361";
 const my_nick = "rafalp";
+var messagesSent = 0
 
-function getMessages(url) {
-  console.log('in')
-  let messages
-  fetch(url)
-    .then(x => x.json())
-    .then((y) => {
-      console.log(y)
-    })
+async function getMessages(url) {
+  const response = await axios.get(url)
+  const messages = response.data
+  const splitMessages = messages.slice(messagesSent, messages.length)
+  //console.log(splitMessages)
+  io.emit('chat message', splitMessages)
+  messagesSent = messages.length
 }
 
 function sendMessage(msg) {
@@ -41,19 +41,11 @@ io.on('connection', function(socket){
   });
 })
 
-io.on('connection', async function(socket) {
-  const response = await axios.get('http://34.210.35.174:7000')
-  const message = response.data 
-  io.emit('chat message', message)
-})
+io.on('connection', function(socket) {
+ setInterval(() => getMessages('http://34.210.35.174:7000'), 1000)
+  }
+)
 
 http.listen(3000, function() {
   console.log('listening on *:3000')
 })
-
-
-
-
-
-
-
